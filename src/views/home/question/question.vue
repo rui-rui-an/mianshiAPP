@@ -1,7 +1,5 @@
 <template>
-  <div class="app">
-    <router-view></router-view>
-  </div>
+  <div>刷题</div>
 </template>
 
 <script>

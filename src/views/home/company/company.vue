@@ -1,7 +1,5 @@
 <template>
-  <div class="app">
-    <router-view></router-view>
-  </div>
+  <div>公司</div>
 </template>
 
 <script>
