@@ -11,9 +11,16 @@
           v-if="userInfo.avarar"
           :src="baseUrl + userInfo.avarar"
           class="top1_right"
+          @click="goInfo"
           alt=""
         />
-        <img v-else src="@/assets/logo.png" class="top1_right" alt="" />
+        <img
+          v-else
+          src="@/assets/logo.png"
+          @click="goInfo"
+          class="top1_right"
+          alt=""
+        />
       </div>
       <ul class="top2">
         <li class="top2_li">
@@ -33,8 +40,12 @@
           <div class="top2_txt">累计答题</div>
         </li>
       </ul>
-      <div class="top3">
-        <myCell title="我的岗位" value="产品经理" icon="&#xe64d;"></myCell>
+      <div class="top3" @click="$router.push('/home/editInfo?type=position')">
+        <myCell
+          title="我的岗位"
+          :value="userInfo.position ? userInfo.position : '未知'"
+          icon="&#xe64d;"
+        ></myCell>
       </div>
     </div>
     <div class="content">
@@ -73,8 +84,8 @@
 <script>
 import myCell from './myCell'
 import { mapState } from 'vuex'
-import { auInfo } from '@/api/my.js'
-import { getLocal } from '@/utils/local.js'
+// import { auInfo } from '@/api/my.js'
+// import { getLocal } from '@/utils/local.js'
 export default {
   components: {
     myCell
@@ -82,6 +93,11 @@ export default {
   data () {
     return {
       baseUrl: process.env.VUE_APP_URL
+    }
+  },
+  methods: {
+    goInfo () {
+      this.$router.push('/home/myInfo')
     }
   },
   computed: {
@@ -98,25 +114,25 @@ export default {
     //  没登录
     // 如果没有token  那么就跳转登录页(还要做处理)
     // 如果有token  那么就发送请求请求用户数据再存储到vuex中
-    if (!this.isLogin) {
-      if (getLocal()) {
-        auInfo()
-          .then(res => {
-            // console.log(res)
-            // 存储用户数据
-            this.$store.commit('setUserInfo', res.data.data)
-            // 设置登录状态为已登录
-            this.$store.commit('setIsLogin', true)
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      } else {
-        // 没有登录也没有token
-        this.$toast.fail('请重新登录')
-        this.$router.push('/login')
-      }
-    }
+    // if (!this.isLogin) {
+    //   if (getLocal()) {
+    //     auInfo()
+    //       .then(res => {
+    //         // console.log(res)
+    //         // 存储用户数据
+    //         this.$store.commit('setUserInfo', res.data.data)
+    //         // 设置登录状态为已登录
+    //         this.$store.commit('setIsLogin', true)
+    //       })
+    //       .catch(err => {
+    //         console.log(err)
+    //       })
+    //   } else {
+    //     // 没有登录也没有token
+    //     this.$toast.fail('请重新登录')
+    //     this.$router.push('/login')
+    //   }
+    // }
   }
 }
 </script>

@@ -1,10 +1,11 @@
 <template>
   <div class="login">
-    <van-nav-bar>
+    <!-- <van-nav-bar>
       <template #left>
         <i class="iconfont f44">&#xe637;</i>
       </template>
-    </van-nav-bar>
+    </van-nav-bar> -->
+    <hmNavBar path="/home/find" title="登录"></hmNavBar>
     <div class="content">
       <h3 class="title">您好，请登录</h3>
       <!-- 用户输入表单区 -->
@@ -49,7 +50,7 @@
 
 <script>
 import { auCode, auLogin } from '@/api/login.js'
-import { setLocal } from '@/utils/local.js'
+import { setLocal, getLocal } from '@/utils/local.js'
 export default {
   data () {
     return {
@@ -138,7 +139,13 @@ export default {
               this.$store.commit('setUserInfo', res.data.data.user)
               // 设置登录状态为已登录
               this.$store.commit('setIsLogin', true)
-              this.$router.push('/home')
+              // 在这里不能直接跳转到home页，因为用户不一定想去的就是home页，要考虑他来的页面
+              const _redirect = this.$route.query.redirect
+              if (_redirect) {
+                this.$router.push(_redirect)
+              } else {
+                this.$router.push('/home')
+              }
             })
             .catch(err => {
               console.log(err)
@@ -150,7 +157,8 @@ export default {
     }
   },
   created () {
-    if (this.$store.state.isLogin) {
+    // 这里是只要有token，就跳转到home页。因为token异常的问题我们已经考虑到了
+    if (getLocal()) {
       this.$router.push('/home')
     }
   }
@@ -159,13 +167,6 @@ export default {
 
 <style lang="less" scoped>
 .login {
-  .f44 {
-    font-size: 44px;
-  }
-  ::v-deep .van-nav-bar__left,
-  ::v-deep .van-nav-bar__right {
-    padding: 0;
-  }
   .content {
     padding: 0 @pd15;
     .title {

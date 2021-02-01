@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Toast } from 'vant'
-import { removeLocal } from '@/utils/local.js'
+import { removeLocal, getLocal } from '@/utils/local.js'
 import router from '@/router'
 import Store from '@/store'
 const _fetch = axios.create({
@@ -9,6 +9,9 @@ const _fetch = axios.create({
 // 请求拦截器
 _fetch.interceptors.request.use(
   function (config) {
+    if (config.needToken) {
+      config.headers.authorization = `Bearer ${getLocal()}`
+    }
     return config
   },
   function (error) {
@@ -32,7 +35,9 @@ _fetch.interceptors.response.use(
         // 3.设置登录状态
         Store.commit('setIsLogin', false)
         // 4.跳转到登录页面
-        router.push('/login')
+        // router.push('/login')
+        // 这里也需要处理一下token过期的问题，token过期了再登录也需要回到相应的页面(注意这里的参数)
+        router.push('/login?redirect=' + window.location.href.split('#')[1])
         // 5.这里也要阻止.then的执行。因为这里也是请求错误的情况
         return Promise.reject(new Error(res.data.message))
       } else {

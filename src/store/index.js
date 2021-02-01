@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { auInfo } from '@/api/my.js'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,11 @@ export default new Vuex.Store({
       state.isLogin = value
     }
   },
-  actions: {},
+  actions: {
+    async refreshUserInfo (store) {
+      const res = await auInfo()
+      store.commit('setUserInfo', res.data.data)
+    }
+  },
   modules: {}
 })

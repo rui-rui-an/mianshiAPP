@@ -1,7 +1,19 @@
 <template>
   <van-cell is-link center class="mycell">
     <template #default>
-      <div class="value">{{ value }}</div>
+      <img
+        class="img"
+        v-if="type === 'img' && value"
+        :src="$baseUrl + value"
+        alt=""
+      />
+      <img
+        class="img"
+        v-else-if="type === 'img' && !value"
+        src="@/assets/logo.png"
+        alt=""
+      />
+      <div v-else class="value">{{ value }}</div>
     </template>
     <template #title>
       <div class="title">{{ title }}</div>
@@ -14,7 +26,7 @@
 
 <script>
 export default {
-  props: ['title', 'icon', 'value']
+  props: ['title', 'icon', 'value', 'type']
 }
 </script>
 
@@ -40,6 +52,11 @@ export default {
     color: #181a39;
     line-height: 20px;
     letter-spacing: 0px;
+  }
+  .img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
   }
 }
 </style>
