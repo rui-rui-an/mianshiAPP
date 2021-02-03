@@ -72,7 +72,7 @@ export default {
   },
   data () {
     return {
-      inpValue: '',
+      inpValue: this.$route.query.q ? this.$route.query.q : '',
       list: [],
       loading: false,
       finished: false,
@@ -102,6 +102,8 @@ export default {
         this.historyList.splice(5)
         setLocal(JSON.stringify(this.historyList), 'historyList')
       }
+      // 修改记录当前的地址，让该地址可以回调
+      this.$router.push('/home/shareList?q=' + this.inpValue)
     },
     async cancelEvent () {
       //   console.log('cancelEvent')
@@ -119,7 +121,7 @@ export default {
       })
       //   console.log(res)
       this.currentPage++
-      console.log(res.data.data.list)
+      // console.log(res.data.data.list)
       if (this.inpValue !== '') {
         res.data.data.list.forEach(val => {
           val.title = val.title

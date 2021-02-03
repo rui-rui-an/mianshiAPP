@@ -1,7 +1,7 @@
 <template>
   <div class="shareItem van-multi-ellipsis--l2">
-    <h4 class="title" v-html="info.title">{{ info.title }}</h4>
-    <div class="txt van-multi-ellipsis--l2">
+    <h4 class="title" v-html="info.title" @click="goInfo">{{ info.title }}</h4>
+    <div class="txt van-multi-ellipsis--l2" @click="goInfo">
       {{ info.content }}
     </div>
     <div class="bottom">
@@ -18,7 +18,14 @@
 
 <script>
 export default {
-  props: ['info']
+  props: ['info'],
+  methods: {
+    goInfo () {
+      this.$router.push(
+        '/home/shareInfo/' + this.info.id + '?repath=' + this.$route.fullPath
+      )
+    }
+  }
 }
 </script>
 

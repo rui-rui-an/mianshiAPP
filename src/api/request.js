@@ -7,11 +7,35 @@ const _fetch = axios.create({
   baseURL: process.env.VUE_APP_URL
 })
 // 请求拦截器
+let cancelArr = []
+
+window.cancelEvent = function (url, cancelAll) {
+  cancelArr = cancelArr.filter((item, index) => {
+    if (cancelAll) {
+      item.fn()
+      return false
+    } else {
+      if (item.url === url) {
+        item.fn()
+        return false
+      } else {
+        return true
+      }
+    }
+  })
+}
 _fetch.interceptors.request.use(
   function (config) {
+    window.cancelEvent(config.url, false)
     if (config.needToken) {
       config.headers.authorization = `Bearer ${getLocal()}`
     }
+    config.cancelToken = new axios.CancelToken(function (cancel) {
+      cancelArr.push({
+        fn: cancel,
+        url: config.url
+      })
+    })
     return config
   },
   function (error) {

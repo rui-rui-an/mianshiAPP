@@ -44,6 +44,10 @@ const routes = [
         component: () => import('@/views/home/find/shareList.vue')
       },
       {
+        path: '/home/shareInfo/:id?',
+        component: () => import('@/views/home/find/shareInfo.vue')
+      },
+      {
         path: '/home/my',
         component: () => import('@/views/home/my/my.vue'),
         meta: {
@@ -92,6 +96,7 @@ router.beforeEach((to, from, next) => {
     // 不需要登录
         // 直接next（）
    */
+  window.cancelEvent('', true)
   if (to.meta.needLogin) {
     if (Store.state.isLogin) {
       next()
